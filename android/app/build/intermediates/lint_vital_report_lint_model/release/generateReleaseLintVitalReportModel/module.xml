@@ -1,0 +1,19 @@
+<lint-module
+    format="1"
+    dir="C:\coolblue-second-chance-app\android\app"
+    name=":app"
+    type="APP"
+    maven="CoolblueSecondChance:app:unspecified"
+    agpVersion="8.4.0"
+    buildFolder="build"
+    bootClassPath="C:\android-build\sdk\platforms\android-34\android.jar;C:\android-build\sdk\build-tools\34.0.0\core-lambda-stubs.jar"
+    javaSourceLevel="17"
+    compileTarget="android-34"
+    neverShrinking="true">
+  <lintOptions
+      abortOnError="true"
+      absolutePaths="true"
+      checkReleaseBuilds="true"
+      explainIssues="true"/>
+  <variant name="release"/>
+</lint-module>

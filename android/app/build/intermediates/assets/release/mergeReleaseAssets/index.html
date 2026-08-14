@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coolblue Second Chance — Meilleures offres reconditionnées</title>
+    <meta name="theme-color" content="#0090E3">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" type="image/png" href="icons/icon-192.png">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Les meilleures offres de produits reconditionnés Coolblue Second Chance, triées par économie.">
+    <style>
+        :root {
+            --blue: #0090E3;
+            --blue-dark: #0067B0;
+            --blue-light: #E6F6FF;
+            --green: #008500;
+            --red: #E00000;
+            --orange: #FF8C00;
+            --dark: #232323;
+            --gray: #666666;
+            --bg: #F4F6F8;
+            --card: #FFFFFF;
+            --border: #DDE3EA;
+            --soft: #F0F2F5;
+            --radius: 16px;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --shadow-hover: 0 12px 28px rgba(0, 0, 0, 0.14);
+        }
+
+        [data-theme="dark"] {
+            --dark: #E8E8E8;
+            --gray: #A6ADB6;
+            --bg: #121417;
+            --card: #1C1F23;
+            --border: #33373D;
+            --soft: #262A30;
+            --blue-light: #12283A;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+            --shadow-hover: 0 12px 28px rgba(0, 0, 0, 0.55);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', 'Open Sans', Tahoma, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--dark);
+            min-height: 100vh;
+            transition: background 0.25s, color 0.25s;
+        }
+
+        /* ---------- Header ---------- */
+        header {
+            background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
+            color: #fff;
+            padding: 30px 20px 64px;
+            text-align: center;
+            position: relative;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            background: rgba(255, 255, 255, 0.18);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            border-radius: 999px;
+            padding: 8px 14px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+            transition: background 0.2s;
+        }
+
+        .theme-toggle:hover { background: rgba(255, 255, 255, 0.3); }
+
+        .header-actions {
+            position: absolute;
+            top: 68px;
+            right: 18px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: flex-end;
+            max-width: 70%;
+        }
+
+        .header-actions .btn {
+            background: rgba(255, 255, 255, 0.16);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            color: #fff;
+            backdrop-filter: blur(4px);
+            padding: 8px 12px;
+            font-size: 0.82rem;
+            align-self: center;
+        }
+
+        .header-actions .btn:hover { background: rgba(255, 255, 255, 0.3); transform: none; }
+
+        .header-actions .btn.green { background: rgba(0, 155, 0, 0.55); border-color: rgba(255, 255, 255, 0.4); }
+        .header-actions .btn.green:hover { background: rgba(0, 130, 0, 0.7); }
+
+        .header-actions .btn.ghost { background: rgba(255, 255, 255, 0.12); }
+        .header-actions .btn.ghost:hover { background: rgba(255, 255, 255, 0.25); color: #fff; border-color: #fff; }
+
+        .header-actions .btn.active {
+            background: rgba(255, 255, 255, 0.35);
+            box-shadow: inset 0 0 0 2px #fff;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        header .logo {
+            background: #fff;
+            color: var(--blue);
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.3rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        header .subtitle {
+            margin-top: 10px;
+            opacity: 0.92;
+            font-size: 1.05rem;
+        }
+
+        .meta {
+            margin-top: 14px;
+            font-size: 0.85rem;
+            opacity: 0.85;
+        }
+
+        /* ---------- Container ---------- */
+        .container {
+            max-width: 1280px;
+            margin: -38px auto 60px;
+            padding: 0 20px;
+        }
+
+        /* ---------- Toolbar ---------- */
+        .toolbar {
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 18px;
+            margin-bottom: 24px;
+        }
+
+        .toolbar-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .toolbar-row + .toolbar-row {
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid var(--soft);
+        }
+
+        .search-box {
+            flex: 1 1 260px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 11px 14px 11px 40px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            background: var(--card);
+            color: var(--dark);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-box input:focus { border-color: var(--blue); }
+
+        .search-box .icon {
+            position: absolute;
+            left: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9AA5B1;
+            font-size: 1rem;
+        }
+
+        .suggestions {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            right: 0;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
+            z-index: 50;
+            max-height: 320px;
+            overflow-y: auto;
+        }
+
+        .suggestions .s-head {
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: var(--gray);
+            padding: 10px 14px 4px;
+        }
+
+        .suggestions .s-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            padding: 9px 14px;
+            background: none;
+            border: none;
+            text-align: left;
+            font-size: 0.9rem;
+            color: var(--dark);
+            cursor: pointer;
+        }
+
+        .suggestions .s-item:hover { background: var(--soft); }
+
+        .suggestions .s-item .s-icon { font-size: 0.95rem; flex: 0 0 auto; }
+        .suggestions .s-item .s-text { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .suggestions .s-item .s-count { color: var(--gray); font-size: 0.8rem; }
+        .suggestions .s-item mark { background: none; color: var(--blue); font-weight: 800; }
+        .suggestions .hidden { display: none; }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            align-items: center;
+        }
+
+        .field label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--gray);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        select, .field input {
+            padding: 10px 12px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            background: var(--card);
+            color: var(--dark);
+            cursor: pointer;
+            outline: none;
+        }
+
+        select:focus, .field input:focus { border-color: var(--blue); }
+
+        .field input {
+            width: 110px;
+            cursor: text;
+        }
+
+        .field.check {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 0;
+        }
+
+        .field.check label {
+            margin: 0;
+            text-transform: none;
+            letter-spacing: 0;
+            font-size: 0.9rem;
+            color: var(--dark);
+            cursor: pointer;
+        }
+
+        .field.check input {
+            width: 17px;
+            height: 17px;
+            cursor: pointer;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--blue);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 11px 18px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+            align-self: flex-end;
+        }
+
+        .btn:hover { background: var(--blue-dark); transform: translateY(-1px); }
+        .btn.loading { opacity: 0.6; pointer-events: none; }
+        .btn:disabled { opacity: 0.45; pointer-events: none; }
+
+        .btn.ghost {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--gray);
+        }
+        .btn.ghost:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-light); }
+
+        .btn.green { background: var(--green); }
+        .btn.green:hover { background: #006B00; }
+
+        /* ---------- Progress ---------- */
+        .progress-wrap {
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .progress-wrap.visible { display: flex; }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: var(--soft);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-bar > div {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--blue), var(--green));
+            border-radius: 999px;
+            transition: width 0.3s;
+        }
+
+        .progress-text {
+            font-size: 0.82rem;
+            color: var(--gray);
+        }
+
+        /* ---------- Status bar ---------- */
+        .status {
+            margin-bottom: 20px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--card);
+            box-shadow: var(--shadow);
+        }
+
+        .status.error { background: #FDECEA; color: #8B0000; border: 1px solid #F5C6C2; }
+        .status.loading { background: #FFF7E0; color: #7A5C00; border: 1px solid #F2DE9B; }
+        .status.ok { background: #EAF6EC; color: #005F00; border: 1px solid #BFE5C6; }
+
+        [data-theme="dark"] .status.error { background: #3A1210; color: #FFB4A8; border-color: #6E241E; }
+        [data-theme="dark"] .status.loading { background: #3A2F10; color: #FFE08A; border-color: #6E5A1E; }
+        [data-theme="dark"] .status.ok { background: #102E14; color: #8AE59B; border-color: #1E5A28; }
+
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 3px solid rgba(0,0,0,0.15);
+            border-top-color: currentColor;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            flex: 0 0 auto;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ---------- Stats ---------- */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-card .value {
+            font-size: 1.9rem;
+            font-weight: 800;
+            color: var(--blue);
+        }
+
+        .stat-card .value.green { color: var(--green); }
+        .stat-card .value.red { color: var(--red); }
+
+        .stat-card .label {
+            margin-top: 4px;
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        /* ---------- Category chips ---------- */
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .chip {
+            padding: 8px 16px;
+            border-radius: 999px;
+            border: 2px solid var(--border);
+            background: var(--card);
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--gray);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .chip:hover { border-color: var(--blue); color: var(--blue); }
+
+        .chip.active {
+            background: var(--blue);
+            border-color: var(--blue);
+            color: #fff;
+        }
+
+        .chip.menu {
+            background: var(--blue-light);
+            border-style: dashed;
+            color: var(--blue);
+        }
+
+        .sort-row {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .sort-dir {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: 2px solid var(--border);
+            background: var(--card);
+            color: var(--blue);
+            font-size: 1.05rem;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .sort-dir:hover { border-color: var(--blue); }
+
+        .modal.modal-cat { width: min(640px, 100%); }
+
+        #categorySearch {
+            width: 100%;
+            padding: 11px 14px;
+            border-radius: 10px;
+            border: 2px solid var(--border);
+            background: var(--bg);
+            color: var(--dark);
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+        }
+
+        #categorySearch:focus { border-color: var(--blue); outline: none; }
+
+        .cat-groups { max-height: 60vh; overflow: auto; }
+
+        .cat-group-title {
+            font-size: 0.76rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: var(--blue);
+            margin: 16px 0 8px;
+        }
+
+        .cat-group-title small { font-weight: 600; text-transform: none; letter-spacing: 0; }
+
+        .cat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 9px 14px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+            cursor: pointer;
+            text-align: left;
+            color: var(--dark);
+        }
+
+        .cat-item:hover { border-color: var(--blue); color: var(--blue); }
+
+        .cat-item.active {
+            background: var(--blue);
+            border-color: var(--blue);
+            color: #fff;
+        }
+
+        .cat-item small { opacity: 0.75; font-weight: 600; }
+
+        /* ---------- Résultats (barre de tri) ---------- */
+        .results-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 12px 16px;
+            margin-bottom: 18px;
+        }
+
+        .result-count {
+            font-weight: 700;
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        .sort-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sort-box label {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ---------- Galerie d'images ---------- */
+        .img-thumbs {
+            display: flex;
+            gap: 6px;
+            padding: 8px 8px 2px;
+            flex-wrap: wrap;
+        }
+
+        .img-thumb {
+            width: 52px;
+            height: 52px;
+            object-fit: contain;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background: #fff;
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 2px;
+        }
+
+        [data-theme="dark"] .img-thumb { background: #2A2F3A; }
+
+        .img-thumb:hover { border-color: var(--blue); }
+
+        .img-thumb.active {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 2px var(--blue-light);
+        }
+
+        /* ---------- Offers grid ---------- */
+        .offers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            gap: 22px;
+        }
+
+        .offer-card {
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.25s, box-shadow 0.25s;
+        }
+
+        .offer-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .card-image {
+            position: relative;
+            background: var(--card);
+            padding: 14px;
+            border-bottom: 1px solid var(--soft);
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 190px;
+            object-fit: contain;
+        }
+
+        .discount-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: var(--red);
+            color: #fff;
+            font-weight: 800;
+            font-size: 0.9rem;
+            padding: 6px 12px;
+            border-radius: 999px;
+            box-shadow: 0 2px 8px rgba(224, 0, 0, 0.35);
+        }
+
+        .variants-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(0, 0, 0, 0.65);
+            color: #fff;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 6px 11px;
+            border-radius: 999px;
+            backdrop-filter: blur(3px);
+        }
+
+        .new-badge {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            background: var(--blue);
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 5px 11px;
+            border-radius: 999px;
+            box-shadow: 0 2px 8px rgba(0, 144, 227, 0.4);
+        }
+
+        .deal-score {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            background: linear-gradient(135deg, #ff8a00, #ff4500);
+            color: #fff;
+            font-size: 0.78rem;
+            font-weight: 800;
+            padding: 5px 11px;
+            border-radius: 999px;
+            box-shadow: 0 2px 8px rgba(255, 69, 0, 0.35);
+        }
+
+        .card-body {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .category-tag {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: var(--blue);
+            margin-bottom: 6px;
+        }
+
+        .brand-tag {
+            display: inline-block;
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--dark);
+            background: var(--soft);
+            border-radius: 6px;
+            padding: 3px 8px;
+            margin-bottom: 8px;
+        }
+
+        .product-name mark {
+            background: #FFE08A;
+            color: #5C3D00;
+            border-radius: 3px;
+            padding: 0 1px;
+        }
+
+        [data-theme="dark"] .product-name mark {
+            background: #6E5A1E;
+            color: #FFE08A;
+        }
+
+        .card-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .action-btn {
+            border: 2px solid var(--border);
+            background: var(--card);
+            color: var(--gray);
+            border-radius: 10px;
+            padding: 9px 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            line-height: 1.2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .action-btn:hover { border-color: var(--blue); color: var(--blue); }
+
+        .action-btn.active { background: var(--blue-light); border-color: var(--blue); color: var(--blue); }
+
+        .action-btn.fav.active { background: #FFF3D6; border-color: #FFB400; color: #B8860B; }
+
+        .price-drop {
+            margin-top: 6px;
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: #008500;
+            background: #EAF6EC;
+            border-radius: 8px;
+            padding: 6px 10px;
+            display: inline-block;
+        }
+
+        /* ---------- Alerts (baisses de prix) ---------- */
+        .alerts {
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #EAF6EC, #F2FBF4);
+            border: 1px solid #BFE5C6;
+            color: #005F00;
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.92rem;
+            box-shadow: var(--shadow);
+        }
+
+        [data-theme="dark"] .alerts { background: #102E14; color: #8AE59B; border-color: #1E5A28; }
+
+        .alerts button {
+            margin-left: auto;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            color: inherit;
+            opacity: 0.7;
+        }
+
+        /* ---------- Panel stats ---------- */
+        .stats-panel {
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .stats-panel h3 { margin-bottom: 16px; font-size: 1.05rem; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 22px;
+        }
+
+        .stat-chart { min-width: 0; }
+
+        .stat-chart h4 { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.6px; color: var(--gray); margin-bottom: 10px; }
+
+        .bar-row {
+            display: grid;
+            grid-template-columns: 110px 1fr 46px;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 7px;
+            font-size: 0.85rem;
+        }
+
+        .bar-row .lbl { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+        .bar-track { background: var(--soft); border-radius: 999px; height: 14px; overflow: hidden; }
+
+        .bar-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--blue), #38B5F8); min-width: 2px; }
+
+        .bar-row .val { text-align: right; color: var(--gray); font-weight: 700; }
+
+        /* ---------- Comparateur ---------- */
+        .compare-bar {
+            position: fixed;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 16px;
+            background: var(--dark);
+            color: #fff;
+            border-radius: 999px;
+            padding: 10px 14px 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+            z-index: 90;
+            font-weight: 700;
+        }
+
+        .compare-bar .btn { align-self: auto; padding: 8px 16px; }
+
+        .compare-bar .btn.ghost { border-color: rgba(255, 255, 255, 0.4); color: #fff; }
+        .compare-bar .btn.ghost:hover { background: rgba(255, 255, 255, 0.15); color: #fff; }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal {
+            background: var(--card);
+            border-radius: 16px;
+            width: min(1200px, 100%);
+            max-height: 92vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+            overflow: hidden;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--soft);
+        }
+
+        .modal-header h3 { font-size: 1.1rem; }
+
+        .modal-header button {
+            background: var(--soft);
+            border: none;
+            border-radius: 8px;
+            width: 34px;
+            height: 34px;
+            font-size: 1rem;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        .modal-body { overflow: auto; padding: 20px; }
+
+        .chart-title {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+
+        .chart-summary {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            font-size: 0.88rem;
+            color: var(--muted, #666);
+            margin-bottom: 14px;
+        }
+
+        .chart-summary .chart-drop {
+            color: #16a34a;
+            font-weight: 700;
+        }
+
+        #priceChart {
+            width: 100%;
+            max-height: 40vh;
+            display: block;
+        }
+
+        #notifBtn.active {
+            background: var(--blue-light);
+            border-color: var(--blue);
+            color: var(--blue);
+        }
+
+        .compare-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+
+        .compare-table th, .compare-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--soft);
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .compare-table th { color: var(--gray); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; width: 150px; }
+
+        .compare-table .p-name { font-weight: 700; line-height: 1.3; }
+        .compare-table .p-price { font-size: 1.25rem; font-weight: 800; color: var(--blue-dark); }
+        .compare-table .p-disc { color: var(--green); font-weight: 700; }
+        .compare-table img { width: 100%; max-width: 180px; height: 110px; object-fit: contain; }
+
+        .hidden { display: none !important; }
+
+        .product-name {
+            font-size: 1rem;
+            font-weight: 700;
+            line-height: 1.35;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            min-height: 2.7em;
+        }
+
+        .condition {
+            margin-top: 8px;
+            font-size: 0.8rem;
+            color: var(--gray);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .condition .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--green);
+        }
+
+        .condition.damaged .dot { background: var(--orange); }
+        .condition.soldout .dot { background: var(--red); }
+
+        .rating {
+            margin-top: 6px;
+            font-size: 0.82rem;
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .rating .stars { color: #FFB400; letter-spacing: 1px; }
+        .rating b { color: var(--dark); }
+
+        .price-block {
+            margin: 14px 0 4px;
+            padding: 12px 14px;
+            background: var(--blue-light);
+            border-radius: 12px;
+        }
+
+        .price-old {
+            font-size: 0.9rem;
+            color: var(--gray);
+            text-decoration: line-through;
+        }
+
+        .price-new {
+            font-size: 1.55rem;
+            font-weight: 800;
+            color: var(--blue-dark);
+        }
+
+        [data-theme="dark"] .price-new { color: #59B7F5; }
+
+        .price-new .cur { font-size: 1rem; }
+
+        .savings {
+            margin-top: 6px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--green);
+        }
+
+        .stock {
+            margin-top: 8px;
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .stock.out { color: var(--red); }
+
+        .card-footer {
+            margin-top: auto;
+            padding: 14px 16px 16px;
+        }
+
+        .buy-btn {
+            display: block;
+            width: 100%;
+            background: var(--blue);
+            color: #fff;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            padding: 12px;
+            border-radius: 10px;
+            transition: background 0.2s;
+        }
+
+        .buy-btn:hover { background: var(--blue-dark); }
+
+        /* ---------- Show more ---------- */
+        .load-more {
+            display: block;
+            margin: 32px auto 0;
+            padding: 13px 34px;
+            border: 2px solid var(--blue);
+            background: var(--card);
+            color: var(--blue);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .load-more:hover { background: var(--blue); color: #fff; }
+
+        .load-more.hidden { display: none; }
+
+        /* ---------- Empty state ---------- */
+        .empty {
+            text-align: center;
+            padding: 80px 20px;
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            color: var(--gray);
+        }
+
+        .empty h3 { font-size: 1.3rem; margin-bottom: 8px; color: var(--dark); }
+
+        footer {
+            text-align: center;
+            color: var(--gray);
+            font-size: 0.82rem;
+            padding: 30px 20px 40px;
+        }
+
+        footer a { color: var(--blue); text-decoration: none; }
+
+        @media (max-width: 640px) {
+            header h1 { font-size: 1.6rem; }
+            .offers-grid { grid-template-columns: 1fr; }
+            .toolbar-row { flex-direction: column; align-items: stretch; }
+            .controls { justify-content: flex-start; }
+            .header-actions {
+                position: static;
+                justify-content: center;
+                max-width: 100%;
+                margin: 14px 0 4px;
+            }
+            .header-actions .btn { font-size: 0.76rem; padding: 7px 9px; }
+            .results-bar { flex-direction: column; align-items: stretch; }
+            .sort-box { justify-content: space-between; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <button class="theme-toggle" id="themeToggle" type="button">🌙 Sombre</button>
+        <div class="header-actions" id="headerActions">
+            <button class="btn green" id="updateBtn" title="Scraper les offres depuis Coolblue">
+                <span>⬇️</span> Mise à jour des offres
+            </button>
+            <button class="btn ghost" id="rebuildBtn" title="Recompiler l'APK Android" hidden>
+                <span>📦</span> Recompiler l'APK
+            </button>
+            <button class="btn ghost" id="refreshBtn" title="Recharger les données">
+                <span>🔄</span> Rafraîchir
+            </button>
+            <button class="btn ghost" id="exportBtn" title="Exporter les résultats en CSV">
+                <span>📄</span> Export CSV
+            </button>
+            <button class="btn ghost" id="statsBtn" title="Statistiques et graphiques">
+                <span>📊</span> Statistiques
+            </button>
+            <button class="btn ghost" id="notifBtn" title="Recevoir des alertes de baisse de prix">
+                <span>🔔</span> Alertes
+            </button>
+        </div>
+        <h1><span class="logo">C</span> Coolblue Second Chance</h1>
+        <p class="subtitle">Les meilleures offres de produits reconditionnés, triées par économie</p>
+        <div class="meta" id="headerMeta"></div>
+    </header>
+
+    <div class="container">
+        <div class="status loading" id="statusBar">
+            <div class="spinner"></div>
+            <span id="statusText">Chargement des offres…</span>
+        </div>
+
+        <div class="alerts hidden" id="alerts"></div>
+
+        <div class="toolbar" id="toolbar" style="display:none;">
+            <div class="toolbar-row">
+                <div class="search-box">
+                    <span class="icon">🔎</span>
+                    <input type="text" id="searchInput" placeholder="Recherche intelligente : marque, type, modèle… (ex : iphone 15, tv 65, dyson)" autocomplete="off">
+                    <div class="suggestions hidden" id="suggestions"></div>
+                </div>
+                <div class="controls">
+                    <div class="field">
+                        <label for="brandSelect">Marque</label>
+                        <select id="brandSelect">
+                            <option value="Toutes">Toutes les marques</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="conditionSelect">État</label>
+                        <select id="conditionSelect">
+                            <option value="Toutes">Tous les états</option>
+                            <option value="Undamaged">Undamaged (impeccable)</option>
+                            <option value="Lightly damaged">Lightly damaged</option>
+                            <option value="Visibly damaged">Visibly damaged</option>
+                            <option value="Neuf">Neuf</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="minDiscount">Remise min.</label>
+                        <select id="minDiscount">
+                            <option value="0">0 %</option>
+                            <option value="10">≥ 10 %</option>
+                            <option value="20">≥ 20 %</option>
+                            <option value="30">≥ 30 %</option>
+                            <option value="40">≥ 40 %</option>
+                            <option value="50">≥ 50 %</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>Prix min (€)</label>
+                        <input type="number" id="priceMin" min="0" placeholder="0">
+                    </div>
+                    <div class="field">
+                        <label>Prix max (€)</label>
+                        <input type="number" id="priceMax" min="0" placeholder="∞">
+                    </div>
+                    <div class="field check">
+                        <input type="checkbox" id="inStock">
+                        <label for="inStock">En stock</label>
+                    </div>
+                    <div class="field check">
+                        <input type="checkbox" id="deliveryTomorrow">
+                        <label for="deliveryTomorrow">Livraison demain</label>
+                    </div>
+                    <div class="field check">
+                        <input type="checkbox" id="withReviews">
+                        <label for="withReviews">Avec avis</label>
+                    </div>
+                    <div class="field check">
+                        <input type="checkbox" id="multiVariants">
+                        <label for="multiVariants">Plusieurs variantes</label>
+                    </div>
+                    <div class="field check">
+                        <input type="checkbox" id="favOnly">
+                        <label for="favOnly">Mes favoris ⭐</label>
+                    </div>
+                    <div class="field check">
+                        <input type="checkbox" id="newArrivals">
+                        <label for="newArrivals">Nouveautés 🆕</label>
+                    </div>
+                    <button class="btn ghost" id="clearFilters" title="Réinitialiser tous les filtres">
+                        <span>✕</span> Effacer les filtres
+                    </button>
+                </div>
+            </div>
+            <div class="toolbar-row">
+                <div class="field check">
+                    <input type="checkbox" id="enrichImages">
+                    <label for="enrichImages">📷 Photos produits (lent)</label>
+                </div>
+                <div class="progress-wrap" id="progressWrap">
+                    <div class="progress-bar"><div id="progressBar"></div></div>
+                    <div class="progress-text" id="progressText"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats" id="statsGrid" style="display:none;"></div>
+
+        <div class="stats-panel hidden" id="statsPanel"></div>
+
+        <div class="chips" id="chips"></div>
+
+        <div class="results-bar" id="resultsBar">
+            <span class="result-count" id="resultCount"></span>
+            <div class="sort-box">
+                <label for="sortSelect">Trier par</label>
+                <div class="sort-row">
+                    <select id="sortSelect">
+                        <option value="discount">Remise (%)</option>
+                        <option value="score">Meilleures affaires 🔥</option>
+                        <option value="savings">Économie (€)</option>
+                        <option value="priceAsc">Prix croissant</option>
+                        <option value="priceDesc">Prix décroissant</option>
+                        <option value="rating">Notes &amp; avis</option>
+                        <option value="newest">Les plus récents</option>
+                    </select>
+                    <button class="sort-dir" id="sortDirBtn" type="button" title="Sens du tri : décroissant">↓</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="offers-grid" id="offersGrid"></div>
+
+        <button class="load-more hidden" id="loadMore" type="button">Afficher plus d'offres</button>
+
+        <div class="empty" id="emptyState" style="display:none;">
+            <h3>Aucune offre trouvée</h3>
+            <p>Essayez de modifier votre recherche, vos filtres ou la fourchette de prix.</p>
+        </div>
+    </div>
+
+    <div class="compare-bar hidden" id="compareBar">
+        <span id="compareCount">0 produit</span>
+        <button class="btn" id="compareOpenBtn" type="button">Comparer</button>
+        <button class="btn ghost" id="compareClearBtn" type="button" title="Vider la sélection">✕</button>
+    </div>
+
+    <div class="modal-overlay hidden" id="compareModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Comparateur</h3>
+                <button id="compareCloseBtn" type="button" title="Fermer">✕</button>
+            </div>
+            <div class="modal-body" id="compareBody"></div>
+        </div>
+    </div>
+
+    <div class="modal-overlay hidden" id="priceModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Historique des prix 📈</h3>
+                <button id="priceCloseBtn" type="button" title="Fermer">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="chart-title" id="priceTitle"></div>
+                <div class="chart-summary" id="priceSummary"></div>
+                <canvas id="priceChart" height="240"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay hidden" id="categoryPanel">
+        <div class="modal modal-cat">
+            <div class="modal-header">
+                <h3>Catégories 🗂️</h3>
+                <button id="categoryCloseBtn" type="button" title="Fermer">✕</button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="categorySearch" placeholder="Rechercher une catégorie (ex : tv, casque, imprimante…)" autocomplete="off">
+                <div class="cat-groups" id="categoryList"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        Données extraites de <a href="https://www.coolblue.be/fr/refurbished" target="_blank" rel="noopener">coolblue.be</a> · Prix et stocks susceptibles de changer ·
+        <a href="https://www.coolblue.be/fr/refurbished" target="_blank" rel="noopener">Voir toutes les offres Deuxième Chance</a>
+    </footer>
+
+    <script src="scraper.js"></script>
+    <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('sw.js').catch(function () {});
+            });
+        }
+    </script>
+</body>
+</html>

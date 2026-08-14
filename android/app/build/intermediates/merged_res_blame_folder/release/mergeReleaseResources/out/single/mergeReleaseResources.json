@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "com.coolblue.secondchance.app-release-19:/drawable_ic_launcher.xml.flat",
+        "source": "com.coolblue.secondchance.app-main-20:/drawable/ic_launcher.xml"
+    },
+    {
+        "merged": "com.coolblue.secondchance.app-release-19:/layout_activity_main.xml.flat",
+        "source": "com.coolblue.secondchance.app-main-20:/layout/activity_main.xml"
+    }
+]

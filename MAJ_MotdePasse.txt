@@ -1,0 +1,5 @@
+Pour recompiler après mise à jour des offres :
+
+python scraper.py --pages 2
+build_apk.bat
+Notes : les photos produits nécessitent internet ; la signature keystore.jks (mot de passe coolblue123) est pour un usage personnel — conserve-la pour les futures mises à jour.
