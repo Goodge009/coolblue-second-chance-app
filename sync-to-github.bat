@@ -1,9 +1,16 @@
 @echo off
 REM Synchroniser le projet OpenCode avec Github depuis mon travail
+
+REM Configurer l'URL GitHub si ce n'est pas deja fait
+git remote add github https://github.com/Goodge009/coolblue-second-chance-app.git 2>nul || git remote set-url github https://github.com/Goodge009/coolblue-second-chance-app.git
+
+REM Verifier que le remote est correct
+echo URL GitHub configuree: %git config --get remote.github.url%
+
 git status
 git add .
 git commit -m "Synchronization to GitHub"
-git push origin main
+git push github main
 if %ERRORLEVEL% EQU 0 (
     echo Succes: Projet synchronise avec Github
 ) else (
