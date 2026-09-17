@@ -1,4 +1,4 @@
-#Fri Aug 14 14:09:20 CEST 2026
+#Thu Sep 17 16:07:39 CEST 2026
 base.1=C\:\\coolblue-second-chance-app\\android\\app\\build\\intermediates\\global_synthetics_dex\\release\\mergeReleaseGlobalSynthetics\\classes.dex
 path.1=classes.dex
 base.0=C\:\\coolblue-second-chance-app\\android\\app\\build\\intermediates\\dex\\release\\mergeDexRelease\\classes.dex

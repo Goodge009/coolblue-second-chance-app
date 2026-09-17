@@ -73,6 +73,7 @@ class SecondChanceApp {
         this.topBrands = [];
         this.searchMatches = new Map();
         this.categoryCounts = new Map();
+        this.categorySlugs = new Map();
         this._searchCache = null;
         this.favs = new Set(this.safeParse(localStorage.getItem('cb-favs'), []).map(String));
         this.priceHistory = this.safeParse(localStorage.getItem('cb-prices'), {});
@@ -80,6 +81,8 @@ class SecondChanceApp {
         this.compareList = [];
         this.recentSearches = this.safeParse(localStorage.getItem('cb-recent'), []);
         this.suggestIndex = -1;
+        this.carouselIdx = new Map();
+        this.carouselImgs = new Map();
         this.isAndroid = !!(window.AndroidBridge);
 
         this.$status = document.getElementById('statusBar');
@@ -156,6 +159,7 @@ class SecondChanceApp {
             console.error('bindEvents:', error);
         }
         this.loadOffers();
+        this.ensureCategorySlugs();
     }
 
     /* ---------------- Theme ---------------- */
@@ -242,6 +246,11 @@ class SecondChanceApp {
 
         // Actions des cartes (favori / comparer / partager / graphique) via délégation
         this.$grid.addEventListener('click', (e) => {
+            const carBtn = e.target.closest ? e.target.closest('.carrow') : null;
+            if (carBtn) {
+                this.carouselNav(carBtn.dataset.car, Number(carBtn.dataset.dir), this.$grid);
+                return;
+            }
             const thumb = e.target.closest ? e.target.closest('.img-thumb') : null;
             if (thumb && e.target.tagName === 'IMG') {
                 this.swapCardImage(thumb, this.$grid);
@@ -272,6 +281,11 @@ class SecondChanceApp {
             if (e.target === this.$compareModal) this.closeCompare();
         });
         this.$compareBody.addEventListener('click', (e) => {
+            const carBtn = e.target.closest ? e.target.closest('.carrow') : null;
+            if (carBtn) {
+                this.carouselNav(carBtn.dataset.car, Number(carBtn.dataset.dir), this.$compareBody);
+                return;
+            }
             const thumb = e.target.closest ? e.target.closest('.img-thumb') : null;
             if (thumb && e.target.tagName === 'IMG') {
                 this.swapCardImage(thumb, this.$compareBody);
@@ -1391,12 +1405,19 @@ class SecondChanceApp {
         const offers = this.compareList.map((id) => this.findOffer(id)).filter(Boolean);
         if (!offers.length) return;
         const imgHtml = (o) => {
-            const main = o.imageUrl || 'https://via.placeholder.com/400x190?text=Photo+indisponible';
-            const others = (o.images || []).filter((u) => u !== main).slice(0, 5);
+            const imgs = this.carouselImages(o);
+            const cid = String(o.id);
+            this.carouselImgs.set(cid, imgs);
+            const arrows = imgs.length > 1
+                ? `<button class="carrow prev" data-car="${cid}" data-dir="-1" aria-label="Photo précédente">‹</button>
+                   <button class="carrow next" data-car="${cid}" data-dir="1" aria-label="Photo suivante">›</button>
+                   <span class="ccount" data-countfor="${cid}">1/${imgs.length}</span>`
+                : '';
+            const others = imgs.slice(1);
             const thumbs = others.length
                 ? `<div class="img-thumbs">${others.map((u) => `<img class="img-thumb" src="${this.escapeHtml(u)}" data-big="${this.escapeHtml(u)}" loading="lazy" alt="">`).join('')}</div>`
                 : '';
-            return `<img class="cmp-main-img" src="${this.escapeHtml(main)}" alt="" loading="lazy">${thumbs}`;
+            return `<div class="carousel"><img class="cmp-main-img" data-carimg="${cid}" src="${this.escapeHtml(imgs[0])}" alt="" loading="lazy">${arrows}</div>${thumbs}`;
         };
         const rows = [
             ['Photos', imgHtml],
@@ -1606,13 +1627,27 @@ class SecondChanceApp {
     }
 
     /* ---------------- Menu catégories (groupé) ---------------- */
+    async ensureCategorySlugs() {
+        if (this.categorySlugs.size > 0) return;
+        try {
+            const categories = await (await fetch('categories.json')).json();
+            this.categorySlugs = this.buildCategorySlugs(categories);
+        } catch (error) {
+            console.warn('categories.json indisponible — regroupement par libellé', error);
+        }
+    }
+
+    buildCategorySlugs(categories) {
+        return new Map(categories.map((c) => [c.label, c.slug]));
+    }
+
     categoryGroup(label, slug) {
         const t = ((label || '') + ' ' + (slug || '')).toLowerCase();
         if (/(smartphone|mobile-phone|smartwatch|tablet)/.test(t)) return 'Téléphonie & Tablettes';
-        if (/(fridge|freezer|dishwasher|washing|dryer|microwave|espresso|coffee|range-hood|cooktop|oven|airfryer|deep-fryer|blender|smoothie|juicer|toaster|kettle|sous-vide|food-processor|pressure-cooker|multicooker|kitchen|cooler|meat-grinder|hand-mixer|stand-mixer)/.test(t)) return 'Électroménager & Cuisine';
+        if (/(fridge|freezer|dishwasher|washing|dryer|microwave|espresso|coffee|range-hood|cooktop|oven|airfryer|deep-fryer|blender|smoothie|juicer|toaster|kettle|sous-vide|food-processor|pressure-cooker|multicooker|kitchen|cooler|meat-grinder|hand-mixer|stand-mixer|mixer)/.test(t)) return 'Électroménager & Cuisine';
         if (/(laptop|desktop|monitor|processor|ssd|memory-card|hard-drive|usb|charger|keyboard|printer|webcam|wifi|network|computer-accessor|laptop-accessor|powerbank|cable)/.test(t)) return 'Informatique';
         if (/(television|projector|smart-tv)/.test(t)) return 'TV & Image';
-        if (/(headphone|earphone|gaming-headset|speaker|soundbar|cinema|receiver|cd-player|dvd|microphone|audio|mixer|streaming)/.test(t)) return 'Audio';
+        if (/(headphone|earphone|gaming-headset|speaker|soundbar|cinema|receiver|cd-player|dvd|microphone|audio|dj-gear|dj-controller|turntable|streaming)/.test(t)) return 'Audio';
         if (/(gaming|nintendo|playstation|lego|virtual-reality)/.test(t)) return 'Gaming';
         if (/(smart-plug|smart-home|thermostat|doorbell|security-camera|nest|baby-monitor)/.test(t)) return 'Smart Home & Sécurité';
         if (/(vacuum|carpet|window-cleaner|humidifier|dehumidifier|steam|iron|air-purifier|fan)/.test(t)) return 'Maison & Air';
@@ -1623,7 +1658,8 @@ class SecondChanceApp {
         return 'Autres';
     }
 
-    openCategoryPanel() {
+    async openCategoryPanel() {
+        await this.ensureCategorySlugs();
         this.renderCategoryPanel(this.categoryQuery);
         this.$categoryPanel.classList.remove('hidden');
         this.$categorySearch.value = this.categoryQuery || '';
@@ -1634,11 +1670,12 @@ class SecondChanceApp {
         this.$categoryPanel.classList.add('hidden');
     }
 
-    renderCategoryPanel(q) {
+    async renderCategoryPanel(q) {
+        await this.ensureCategorySlugs();
         const counts = this.categoryCounts;
         const groups = new Map();
         for (const cat of counts.keys()) {
-            const g = this.categoryGroup(cat, cat);
+            const g = this.categoryGroup(cat, this.categorySlugs.get(cat) || cat);
             if (!groups.has(g)) groups.set(g, []);
             groups.get(g).push(cat);
         }
@@ -1735,6 +1772,13 @@ class SecondChanceApp {
             : '';
 
         const id = String(offer.id);
+        const imgs = this.carouselImages(offer);
+        this.carouselImgs.set(id, imgs);
+        const carouselCtrl = imgs.length > 1
+            ? `<button class="carrow prev" data-car="${id}" data-dir="-1" aria-label="Photo précédente">‹</button>
+               <button class="carrow next" data-car="${id}" data-dir="1" aria-label="Photo suivante">›</button>
+               <span class="ccount" data-countfor="${id}">1/${imgs.length}</span>`
+            : '';
         const isFav = this.favs.has(id);
         const inCompare = this.compareList.indexOf(id) !== -1;
         const drop = this.priceDropFor(id);
@@ -1759,7 +1803,10 @@ class SecondChanceApp {
                 ${newBadge}
                 ${scoreBadge}
                 ${variantsHtml}
-                <img class="card-main-img" src="${this.escapeHtml(imageUrl)}" alt="${this.escapeHtml(offer.name)}" loading="lazy">
+                <div class="carousel">
+                    <img class="card-main-img" data-carimg="${id}" src="${this.escapeHtml(imgs[0])}" alt="${this.escapeHtml(offer.name)}" loading="lazy">
+                    ${carouselCtrl}
+                </div>
             </div>
             ${thumbsHtml}
             <div class="card-body">
@@ -1800,6 +1847,33 @@ class SecondChanceApp {
         `;
 
         return card;
+    }
+
+    carouselImages(offer) {
+        const main = offer.imageUrl || 'https://via.placeholder.com/400x190?text=Photo+indisponible';
+        const imgs = [main].concat((offer.images || []).filter((u) => u && u !== main));
+        const unique = [];
+        const seen = new Set();
+        for (const u of imgs) {
+            if (!seen.has(u)) {
+                seen.add(u);
+                unique.push(u);
+            }
+        }
+        return unique.slice(0, 8);
+    }
+
+    carouselNav(id, dir, container) {
+        const imgs = this.carouselImgs.get(id);
+        if (!imgs || imgs.length < 2) return;
+        let idx = (this.carouselIdx.get(id) || 0) + dir;
+        idx = (idx + imgs.length) % imgs.length;
+        this.carouselIdx.set(id, idx);
+        const scope = container || document;
+        const img = scope.querySelector(`[data-carimg="${id}"]`);
+        if (img) img.src = imgs[idx];
+        const count = scope.querySelector(`[data-countfor="${id}"]`);
+        if (count) count.textContent = `${idx + 1}/${imgs.length}`;
     }
 
     swapCardImage(thumb, container) {

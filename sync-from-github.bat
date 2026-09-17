@@ -1,26 +1,36 @@
-@echo off
-REM Retélécharger le projet sur un autre PC de la maison
-
-REM Demander si le projet est déjà initialisé avec git
-if not exist .git (
-    echo Le projet n'est pas initialise avec Git. Initialisation...
-    git init
-)
-
-REM Ajouter le remote GitHub (remplacez par votre URL GitHub)
-git remote add github https://github.com/Goodge009/coolblue-second-chance-app.git 2>nul
-
-REM Récupérer les derniers changements depuis Github
-echo Telechargement des dernieres modifications depuis Github...
-git fetch origin
-git reset --hard origin/main
-
-REM Demander si l'utilisateur veut faire un pull au lieu de reset
-set /p confirm="Voulez-vous faire un 'git pull' au lieu d'un reset? (O/N): "
-if /i "%confirm%"=="o" (
-    git pull origin main
-) else (
-    echo Projet telecharge avec succes!
-)
-
-pause
+| Dossier | Journal | No | Date | Piece | Constat | Action |
+|---|---|---|---|---|---|---|
+| ATROUSSO | ACH | 0 | 2026-03-31 | 2adb9840-315c-4e1f-965e-5a252041c088.xml | 7 ligne(s) perdue(s) sur 7 - ecriture videe (plus aucune ligne) | Supprimer l'ecriture dans Horus et RETRAITER le document ci-contre |
+| ATROUSSO | ACH | 0 | 2026-08-25 | da219539-64f7-4857-878d-3482e2a014e5.xml | 2 ligne(s) perdue(s) sur 2 - ecriture videe (plus aucune ligne) | Supprimer l'ecriture dans Horus et RETRAITER le document ci-contre |
+| ATROUSSO | ACH | 0 | 2026-03-27 | e6b7883a-6505-4559-97a7-8a11f16b2f95.xml | 7 ligne(s) perdue(s) sur 7 - ecriture videe (plus aucune ligne) | Supprimer l'ecriture dans Horus et RETRAITER le document ci-contre |
+| ATROUSSO | ACH | 0 | 2026-08-25 | ce982af6-c7cc-486d-9305-843c6843adcc.xml | 3 ligne(s) perdue(s) sur 3 - ecriture videe (plus aucune ligne) | Supprimer l'ecriture dans Horus et RETRAITER le document ci-contre |
+| ATROUSSO | ACH | 20261676 | 2026-08-01 | 2525913354_593589723 geodis.pdf | 4 ligne(s) perdue(s) sur 4 - ecriture videe (plus aucune ligne) | Supprimer l'ecriture dans Horus et RETRAITER le document ci-contre |
+| ATROUSSO | BELF | 20260113 | 2026-06-22 | CB20260622_113_f0637f71-a7c9-4b37-9325-b9c31a540cea.cod | 55 ligne(s) perdue(s) sur 82 - ecriture desequilibree de -2288.86 | Supprimer l'ecriture dans Horus et REIMPORTER l'extrait bancaire (fichier CODA ci-contre) |
+| ATROUSSO | BELF | 20260118 | 2026-06-29 | CB20260629_118_5d3bb3f5-5f10-4e38-9265-852271322c42.cod | 44 ligne(s) perdue(s) sur 56 - ecriture desequilibree de 0.00 | Supprimer l'ecriture dans Horus et REIMPORTER l'extrait bancaire (fichier CODA ci-contre) |
+| ATROUSSO | BELF | 20260127 | 2026-07-10 | CB20260710_127_258be638-19cb-48e2-a51a-e7c18de0aa32.cod | 38 ligne(s) perdue(s) sur 38 - ecriture videe (plus aucune ligne) | Supprimer l'ecriture dans Horus et REIMPORTER l'extrait bancaire (fichier CODA ci-contre) |
+| ATROUSSO | BELF | 20260133 | 2026-07-20 | CB20260720_133_b280d88b-12ce-4ed4-8d7c-bac232a87555.cod | 22 ligne(s) perdue(s) sur 22 - ecriture videe (plus aucune ligne) | Supprimer l'ecriture dans Horus et REIMPORTER l'extrait bancaire (fichier CODA ci-contre) |
+| ATROUSSO | BELF | 20260154 | 2026-08-21 | CB20260821_154_c8856459-525c-4c42-8ab8-92b2c2633957.cod | 20 ligne(s) perdue(s) sur 20 - ecriture videe (plus aucune ligne) | Supprimer l'ecriture dans Horus et REIMPORTER l'extrait bancaire (fichier CODA ci-contre) |
+| ATROUSSO | BELF | 20260155 | 2026-08-24 | CB20260824_155_c3bf23c6-3e6d-4b54-a3e1-67a0f1537f95.cod | 21 ligne(s) perdue(s) sur 21 - ecriture videe (plus aucune ligne) | Supprimer l'ecriture dans Horus et REIMPORTER l'extrait bancaire (fichier CODA ci-contre) |
+| ATROUSSO | BELFFA | 20260090 | 2026-05-29 | Relevés du 29_05_26 au 29_05_26_138728_3095393547850463.pdf | 36 ligne(s) perdue(s) sur 36 - ecriture videe (plus aucune ligne) | Supprimer l'ecriture dans Horus et RETRAITER le document ci-contre |
+| ATROUSSO | BELFFA | 20260131 | 2026-08-13 |  | 4 ligne(s) perdue(s) sur 4 - ecriture videe (plus aucune ligne) | Supprimer l'ecriture dans Horus et la RESSAISIR |
+| ATROUSSO | BELFFA | 20260134 | 2026-08-19 |  | 4 ligne(s) perdue(s) sur 4 - ecriture videe (plus aucune ligne) | Supprimer l'ecriture dans Horus et la RESSAISIR |
+| ATROUSSO | BELFFA | 20260135 | 2026-08-20 |  | 4 ligne(s) perdue(s) sur 4 - ecriture videe (plus aucune ligne) | Supprimer l'ecriture dans Horus et la RESSAISIR |
+| ATROUSSO | BELFFA | 20260136 | 2026-08-21 |  | 23 ligne(s) perdue(s) sur 28 - ecriture desequilibree de -7607.88 | Supprimer l'ecriture dans Horus et la RESSAISIR |
+| ATROUSSO | REOPEN | 2612001 | 2026-12-31 |  | 3 ligne(s) perdue(s) sur 3 - ecriture videe (plus aucune ligne) | Supprimer l'ecriture dans Horus et la RESSAISIR |
+| ATROUSSO | VEN | 20261353 | 2026-08-24 | VEN 20261353.pdf | 2 ligne(s) perdue(s) sur 3 - ecriture desequilibree de 0.00 | Supprimer l'ecriture dans Horus et RETRAITER le document ci-contre |
+| ATROUSSO | VEN | 20261354 | 2026-08-24 | VEN 20261354.pdf | 3 ligne(s) perdue(s) sur 3 - ecriture videe (plus aucune ligne) | Supprimer l'ecriture dans Horus et RETRAITER le document ci-contre |
+| ATROUSSO | VEN | 20261355 | 2026-08-25 | VEN 20261355.pdf | 3 ligne(s) perdue(s) sur 3 - ecriture videe (plus aucune ligne) | Supprimer l'ecriture dans Horus et RETRAITER le document ci-contre |
+| ATROUSSO | VEN | 20261356 | 2026-08-25 | VEN 20261356.pdf | 3 ligne(s) perdue(s) sur 3 - ecriture videe (plus aucune ligne) | Supprimer l'ecriture dans Horus et RETRAITER le document ci-contre |
+| ATROUSSO | VEN | 20261357 | 2026-08-25 | VEN 20261357.pdf | 3 ligne(s) perdue(s) sur 3 - ecriture videe (plus aucune ligne) | Supprimer l'ecriture dans Horus et RETRAITER le document ci-contre |
+| ATROUSSO | VEN | 20261358 | 2026-08-25 | VEN 20261358.pdf | 3 ligne(s) perdue(s) sur 3 - ecriture videe (plus aucune ligne) | Supprimer l'ecriture dans Horus et RETRAITER le document ci-contre |
+| ATROUSSO | VEN | 20261359 | 2026-08-25 | VEN 20261359.pdf | 3 ligne(s) perdue(s) sur 3 - ecriture videe (plus aucune ligne) | Supprimer l'ecriture dans Horus et RETRAITER le document ci-contre |
+| ATROUSSO | VEN | 20261360 | 2026-08-25 | VEN 20261360.pdf | 3 ligne(s) perdue(s) sur 3 - ecriture videe (plus aucune ligne) | Supprimer l'ecriture dans Horus et RETRAITER le document ci-contre |
+| ATROUSSO | VEN | 20261361 | 2026-08-25 | VEN 20261361.pdf | 3 ligne(s) perdue(s) sur 3 - ecriture videe (plus aucune ligne) | Supprimer l'ecriture dans Horus et RETRAITER le document ci-contre |
+| ATROUSSO | VEN | 20261362 | 2026-08-25 | VEN 20261362.pdf | 3 ligne(s) perdue(s) sur 3 - ecriture videe (plus aucune ligne) | Supprimer l'ecriture dans Horus et RETRAITER le document ci-contre |
+| ATROUSSO | VEN | 20261363 | 2026-08-25 | VEN 20261363.pdf | 3 ligne(s) perdue(s) sur 3 - ecriture videe (plus aucune ligne) | Supprimer l'ecriture dans Horus et RETRAITER le document ci-contre |
+| ATROUSSO | VEN | 20261364 | 2026-08-25 | VEN 20261364.pdf | 3 ligne(s) perdue(s) sur 3 - ecriture videe (plus aucune ligne) | Supprimer l'ecriture dans Horus et RETRAITER le document ci-contre |
+| ATROUSSO | VEN | 20261365 | 2026-08-25 | VEN 20261365.pdf | 3 ligne(s) perdue(s) sur 3 - ecriture videe (plus aucune ligne) | Supprimer l'ecriture dans Horus et RETRAITER le document ci-contre |
+| ATROUSSO | VEN | 20261366 | 2026-08-25 | VEN 20261366.pdf | 3 ligne(s) perdue(s) sur 3 - ecriture videe (plus aucune ligne) | Supprimer l'ecriture dans Horus et RETRAITER le document ci-contre |
+| ATROUSSO | VEN | 20261367 | 2026-08-25 | VEN 20261367.pdf | 3 ligne(s) perdue(s) sur 3 - ecriture videe (plus aucune ligne) | Supprimer l'ecriture dans Horus et RETRAITER le document ci-contre |
+| ATROUSSO | VEN | 20261368 | 2026-08-25 | VEN 20261368.pdf | 3 ligne(s) perdue(s) sur 3 - ecriture videe (plus aucune ligne) | Supprimer l'ecriture dans Horus et RETRAITER le document ci-contre |
+| ATROUSSO | VEN | 20261369 | 2026-08-25 | VEN 20261369.pdf | 3 ligne(s) perdue(s) sur 3 - ecriture videe (plus aucune ligne) | Supprimer l'ecriture dans Horus et RETRAITER le document ci-contre |

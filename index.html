@@ -691,6 +691,7 @@
             position: absolute;
             top: 12px;
             left: 12px;
+            z-index: 10;
             background: var(--red);
             color: #fff;
             font-weight: 800;
@@ -704,6 +705,7 @@
             position: absolute;
             top: 12px;
             right: 12px;
+            z-index: 10;
             background: rgba(0, 0, 0, 0.65);
             color: #fff;
             font-size: 0.78rem;
@@ -717,6 +719,7 @@
             position: absolute;
             bottom: 12px;
             left: 12px;
+            z-index: 10;
             background: var(--blue);
             color: #fff;
             font-size: 0.75rem;
@@ -730,6 +733,7 @@
             position: absolute;
             bottom: 12px;
             right: 12px;
+            z-index: 10;
             background: linear-gradient(135deg, #ff8a00, #ff4500);
             color: #fff;
             font-size: 0.78rem;
@@ -1164,6 +1168,9 @@
                 </button>
                 <button class="btn ghost" id="rebuildBtn" title="Recompiler l'APK Android" hidden>
                     <span>📦</span> Recompiler l'APK
+                </button>
+                <button class="btn ghost" id="syncBtn" title="Synchroniser le projet sur GitHub">
+                    <span>📤</span> Sync GitHub
                 </button>
                 <button class="btn ghost" id="refreshBtn" title="Recharger les données">
                     <span>🔄</span> Rafraîchir

@@ -7,6 +7,7 @@ Serveur local Coolblue Second Chance.
 - /api/proxy      : recupere une page coolblue.be (contourne le CORS du navigateur)
 - /api/save-json  : enregistre les donnees scrapees (second_chance_offers.json)
 - /api/rebuild-apk: recompile l'APK Android (build_apk.bat)
+- /api/sync-github : synchronise le projet vers GitHub (sync-to-github.bat)
 - /api/status     : etat des donnees et de l'APK
 
 Usage : python server.py   (puis ouvrir http://localhost:8000)
@@ -47,6 +48,7 @@ BUILD_ENV.update({
 })
 
 _build_result = {"running": False, "ok": None, "finished": None, "error": None}
+_sync_result = {"running": False, "ok": None, "finished": None, "output": None, "error": None}
 
 
 def run_build_worker():
@@ -72,6 +74,37 @@ def run_build_worker():
             "running": False,
             "ok": False,
             "finished": time.strftime("%Y-%m-%d %H:%M:%S"),
+            "error": str(exc),
+        }
+
+
+def run_sync_worker():
+    """Lance la synchronisation GitHub dans un thread dedie et met a jour _sync_result."""
+    global _sync_result
+    try:
+        proc = subprocess.Popen(
+            ["cmd", "/c", "sync-to-github.bat", "/nopause"],
+            cwd=BASE_DIR,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+        )
+        output, _ = proc.communicate(timeout=300)
+        _sync_result = {
+            "running": False,
+            "ok": proc.returncode == 0,
+            "finished": time.strftime("%Y-%m-%d %H:%M:%S"),
+            "output": output[-2000:],
+            "error": None if proc.returncode == 0 else f"exit {proc.returncode}",
+        }
+    except Exception as exc:
+        _sync_result = {
+            "running": False,
+            "ok": False,
+            "finished": time.strftime("%Y-%m-%d %H:%M:%S"),
+            "output": None,
             "error": str(exc),
         }
 
@@ -116,7 +149,7 @@ class Handler(SimpleHTTPRequestHandler):
 
     def end_headers(self):
         # Pas de cache pour le shell de l'app (index/sw/manifest) en dev
-        if self.path.split("?")[0] in ("/index.html", "/sw.js", "/manifest.webmanifest", "/app.js"):
+        if self.path.split("?")[0] in ("/index.html", "/sw.js", "/manifest.webmanifest", "/app.js", "/categories.json", "/second_chance_offers.json"):
             self.send_header("Cache-Control", "no-cache")
         super().end_headers()
 
@@ -170,6 +203,7 @@ class Handler(SimpleHTTPRequestHandler):
             },
             "apk": apk,
             "build": _build_result,
+            "sync": _sync_result,
             "now": time.strftime("%Y-%m-%d %H:%M:%S"),
         }
         body = json.dumps(payload).encode("utf-8")
@@ -185,6 +219,8 @@ class Handler(SimpleHTTPRequestHandler):
             self.handle_save_json()
         elif self.path.startswith("/api/rebuild-apk"):
             self.handle_rebuild_apk()
+        elif self.path.startswith("/api/sync-github"):
+            self.handle_sync_github()
         else:
             self.send_response(404)
             self.end_headers()
@@ -223,6 +259,18 @@ class Handler(SimpleHTTPRequestHandler):
         _build_result["error"] = None
         threading.Thread(target=run_build_worker, daemon=True).start()
         self.send_json({"ok": True, "message": "build started"}, 202)
+
+    def handle_sync_github(self):
+        if _sync_result["running"]:
+            self.send_json({"ok": False, "error": "sync already running"}, 409)
+            return
+        _sync_result["running"] = True
+        _sync_result["ok"] = None
+        _sync_result["finished"] = None
+        _sync_result["output"] = None
+        _sync_result["error"] = None
+        threading.Thread(target=run_sync_worker, daemon=True).start()
+        self.send_json({"ok": True, "message": "sync started"}, 202)
 
     def send_json(self, payload, status=200):
         body = json.dumps(payload).encode("utf-8")

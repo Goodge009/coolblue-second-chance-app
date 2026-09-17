@@ -1,5 +1,5 @@
 /* Service worker — application web hors ligne */
-const VERSION = 'coolblue-v7';
+const VERSION = 'coolblue-v8';
 const SHELL = [
     './',
     'index.html',

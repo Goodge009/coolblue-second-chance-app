@@ -73,6 +73,7 @@ class SecondChanceApp {
         this.topBrands = [];
         this.searchMatches = new Map();
         this.categoryCounts = new Map();
+        this.categorySlugs = new Map();
         this._searchCache = null;
         this.favs = new Set(this.safeParse(localStorage.getItem('cb-favs'), []).map(String));
         this.priceHistory = this.safeParse(localStorage.getItem('cb-prices'), {});
@@ -151,6 +152,10 @@ class SecondChanceApp {
             CBS.init();
             this.$rebuild.hidden = true;
         }
+        this.$sync = document.getElementById('syncBtn');
+        if (this.isAndroid && window.CBS && this.$sync) {
+            this.$sync.hidden = true;
+        }
         this.initTheme();
         try {
             this.bindEvents();
@@ -158,6 +163,7 @@ class SecondChanceApp {
             console.error('bindEvents:', error);
         }
         this.loadOffers();
+        this.ensureCategorySlugs();
     }
 
     /* ---------------- Theme ---------------- */
@@ -316,6 +322,9 @@ class SecondChanceApp {
         this.$refresh.addEventListener('click', () => this.loadOffers(true));
         this.$update.addEventListener('click', () => this.updateData());
         this.$rebuild.addEventListener('click', () => this.rebuildApk());
+        if (this.$sync) {
+            this.$sync.addEventListener('click', () => this.syncGithub());
+        }
 
         this.$clear.addEventListener('click', () => this.clearFilters());
 
@@ -564,6 +573,42 @@ class SecondChanceApp {
             this.showProgress(false);
             this.$rebuild.disabled = false;
             this.$update.disabled = false;
+        }
+    }
+
+    async syncGithub() {
+        if (this.$sync) this.$sync.disabled = true;
+        this.showProgress(true, 'Synchronisation vers GitHub en cours…');
+        this.setStatus('loading', 'Envoi vers GitHub en cours…');
+
+        try {
+            const resp = await fetch('/api/sync-github', { method: 'POST' });
+            if (resp.status === 409) {
+                this.setStatus('error', 'Une synchronisation est déjà en cours.');
+                this.showProgress(false);
+                return;
+            }
+            for (let i = 0; i < 60; i++) {
+                await this.sleep(5000);
+                const st = await this.fetchStatus();
+                this.renderProgress({ done: Math.min(60, i + 1), total: 60, category: 'Sync GitHub', units: 0 });
+                if (st.sync && st.sync.finished) {
+                    if (st.sync.ok) {
+                        this.setStatus('ok', '✅ Projet synchronisé avec GitHub.');
+                    } else {
+                        this.setStatus('error', `Synchronisation GitHub échouée : ${st.sync.error || 'erreur inconnue'}`);
+                    }
+                    this.showProgress(false);
+                    return;
+                }
+            }
+            this.setStatus('error', 'Synchronisation trop longue — vérifiez la console du serveur.');
+        } catch (error) {
+            console.error(error);
+            this.setStatus('error', `Synchronisation impossible : ${error.message}`);
+        } finally {
+            this.showProgress(false);
+            if (this.$sync) this.$sync.disabled = false;
         }
     }
 
@@ -1625,13 +1670,27 @@ class SecondChanceApp {
     }
 
     /* ---------------- Menu catégories (groupé) ---------------- */
+    async ensureCategorySlugs() {
+        if (this.categorySlugs.size > 0) return;
+        try {
+            const categories = await (await fetch('categories.json')).json();
+            this.categorySlugs = this.buildCategorySlugs(categories);
+        } catch (error) {
+            console.warn('categories.json indisponible — regroupement par libellé', error);
+        }
+    }
+
+    buildCategorySlugs(categories) {
+        return new Map(categories.map((c) => [c.label, c.slug]));
+    }
+
     categoryGroup(label, slug) {
         const t = ((label || '') + ' ' + (slug || '')).toLowerCase();
         if (/(smartphone|mobile-phone|smartwatch|tablet)/.test(t)) return 'Téléphonie & Tablettes';
-        if (/(fridge|freezer|dishwasher|washing|dryer|microwave|espresso|coffee|range-hood|cooktop|oven|airfryer|deep-fryer|blender|smoothie|juicer|toaster|kettle|sous-vide|food-processor|pressure-cooker|multicooker|kitchen|cooler|meat-grinder|hand-mixer|stand-mixer)/.test(t)) return 'Électroménager & Cuisine';
+        if (/(fridge|freezer|dishwasher|washing|dryer|microwave|espresso|coffee|range-hood|cooktop|oven|airfryer|deep-fryer|blender|smoothie|juicer|toaster|kettle|sous-vide|food-processor|pressure-cooker|multicooker|kitchen|cooler|meat-grinder|hand-mixer|stand-mixer|mixer)/.test(t)) return 'Électroménager & Cuisine';
         if (/(laptop|desktop|monitor|processor|ssd|memory-card|hard-drive|usb|charger|keyboard|printer|webcam|wifi|network|computer-accessor|laptop-accessor|powerbank|cable)/.test(t)) return 'Informatique';
         if (/(television|projector|smart-tv)/.test(t)) return 'TV & Image';
-        if (/(headphone|earphone|gaming-headset|speaker|soundbar|cinema|receiver|cd-player|dvd|microphone|audio|mixer|streaming)/.test(t)) return 'Audio';
+        if (/(headphone|earphone|gaming-headset|speaker|soundbar|cinema|receiver|cd-player|dvd|microphone|audio|dj-gear|dj-controller|turntable|streaming)/.test(t)) return 'Audio';
         if (/(gaming|nintendo|playstation|lego|virtual-reality)/.test(t)) return 'Gaming';
         if (/(smart-plug|smart-home|thermostat|doorbell|security-camera|nest|baby-monitor)/.test(t)) return 'Smart Home & Sécurité';
         if (/(vacuum|carpet|window-cleaner|humidifier|dehumidifier|steam|iron|air-purifier|fan)/.test(t)) return 'Maison & Air';
@@ -1642,7 +1701,8 @@ class SecondChanceApp {
         return 'Autres';
     }
 
-    openCategoryPanel() {
+    async openCategoryPanel() {
+        await this.ensureCategorySlugs();
         this.renderCategoryPanel(this.categoryQuery);
         this.$categoryPanel.classList.remove('hidden');
         this.$categorySearch.value = this.categoryQuery || '';
@@ -1653,11 +1713,12 @@ class SecondChanceApp {
         this.$categoryPanel.classList.add('hidden');
     }
 
-    renderCategoryPanel(q) {
+    async renderCategoryPanel(q) {
+        await this.ensureCategorySlugs();
         const counts = this.categoryCounts;
         const groups = new Map();
         for (const cat of counts.keys()) {
-            const g = this.categoryGroup(cat, cat);
+            const g = this.categoryGroup(cat, this.categorySlugs.get(cat) || cat);
             if (!groups.has(g)) groups.set(g, []);
             groups.get(g).push(cat);
         }
