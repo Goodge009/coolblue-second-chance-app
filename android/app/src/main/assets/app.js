@@ -152,6 +152,10 @@ class SecondChanceApp {
             CBS.init();
             this.$rebuild.hidden = true;
         }
+        this.$sync = document.getElementById('syncBtn');
+        if (this.isAndroid && window.CBS && this.$sync) {
+            this.$sync.hidden = true;
+        }
         this.initTheme();
         try {
             this.bindEvents();
@@ -318,6 +322,9 @@ class SecondChanceApp {
         this.$refresh.addEventListener('click', () => this.loadOffers(true));
         this.$update.addEventListener('click', () => this.updateData());
         this.$rebuild.addEventListener('click', () => this.rebuildApk());
+        if (this.$sync) {
+            this.$sync.addEventListener('click', () => this.syncGithub());
+        }
 
         this.$clear.addEventListener('click', () => this.clearFilters());
 
@@ -566,6 +573,42 @@ class SecondChanceApp {
             this.showProgress(false);
             this.$rebuild.disabled = false;
             this.$update.disabled = false;
+        }
+    }
+
+    async syncGithub() {
+        if (this.$sync) this.$sync.disabled = true;
+        this.showProgress(true, 'Synchronisation vers GitHub en cours…');
+        this.setStatus('loading', 'Envoi vers GitHub en cours…');
+
+        try {
+            const resp = await fetch('/api/sync-github', { method: 'POST' });
+            if (resp.status === 409) {
+                this.setStatus('error', 'Une synchronisation est déjà en cours.');
+                this.showProgress(false);
+                return;
+            }
+            for (let i = 0; i < 60; i++) {
+                await this.sleep(5000);
+                const st = await this.fetchStatus();
+                this.renderProgress({ done: Math.min(60, i + 1), total: 60, category: 'Sync GitHub', units: 0 });
+                if (st.sync && st.sync.finished) {
+                    if (st.sync.ok) {
+                        this.setStatus('ok', '✅ Projet synchronisé avec GitHub.');
+                    } else {
+                        this.setStatus('error', `Synchronisation GitHub échouée : ${st.sync.error || 'erreur inconnue'}`);
+                    }
+                    this.showProgress(false);
+                    return;
+                }
+            }
+            this.setStatus('error', 'Synchronisation trop longue — vérifiez la console du serveur.');
+        } catch (error) {
+            console.error(error);
+            this.setStatus('error', `Synchronisation impossible : ${error.message}`);
+        } finally {
+            this.showProgress(false);
+            if (this.$sync) this.$sync.disabled = false;
         }
     }
 
